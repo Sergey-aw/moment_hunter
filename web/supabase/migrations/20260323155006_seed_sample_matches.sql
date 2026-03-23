@@ -7,21 +7,21 @@ with upsert_matches as (
     (
       'VCT Live Example',
       'esports',
-      'https://www.youtube.com/@ValorantEsports/live',
+      'https://www.youtube.com/embed/hQyGZB5nS9A',
       'live',
       now() - interval '10 minutes'
     ),
     (
       'CS2 Live Example',
       'esports',
-      'https://www.youtube.com/@ESLCS/live',
+      'https://www.youtube.com/embed/l9monkN_cEM',
       'live',
       now() - interval '5 minutes'
     ),
     (
       'Football Goal Moment Example',
       'football',
-      'https://www.youtube.com/watch?v=o3V-GvvzjE4',
+      'https://www.youtube.com/embed/aq8vxvFl7Mc',
       'upcoming',
       now() + interval '2 hours'
     )

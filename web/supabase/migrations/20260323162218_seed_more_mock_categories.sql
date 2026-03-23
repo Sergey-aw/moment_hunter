@@ -5,19 +5,19 @@ with target_matches as (
   select *
   from (
     values
-      ('Premier League Mock: Arsenal vs Chelsea', 'football', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '1 day'),
-      ('NBA Mock: Lakers vs Celtics', 'basketball', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '2 days'),
-      ('NHL Mock: Rangers vs Bruins', 'hockey', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '3 days'),
-      ('UFC Mock: Main Event', 'mma', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '4 days'),
-      ('Dota 2 Mock: Team Spirit vs Tundra', 'esports-dota2', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'live', now() - interval '15 minutes'),
-      ('League of Legends Mock: T1 vs G2', 'esports-lol', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'live', now() - interval '20 minutes'),
+      ('Premier League Mock: Arsenal vs Chelsea', 'football', 'https://www.youtube.com/embed/aq8vxvFl7Mc', 'upcoming', now() + interval '1 day'),
+      ('NBA Mock: Lakers vs Celtics', 'basketball', 'https://www.youtube.com/embed/1B76b_qa8m8', 'upcoming', now() + interval '2 days'),
+      ('NHL Mock: Rangers vs Bruins', 'hockey', 'https://www.youtube.com/embed/pFnkCRPXBkY', 'upcoming', now() + interval '3 days'),
+      ('UFC Mock: Main Event', 'mma', 'https://www.youtube.com/embed/e_8JVNBr-ko', 'upcoming', now() + interval '4 days'),
+      ('Dota 2 Mock: Team Spirit vs Tundra', 'esports-dota2', 'https://www.youtube.com/embed/PTVjyCUJ_Dg', 'live', now() - interval '15 minutes'),
+      ('League of Legends Mock: T1 vs G2', 'esports-lol', 'https://www.youtube.com/embed/_MNAbcb1G7M', 'live', now() - interval '20 minutes'),
       ('Valorant Mock: Sentinels vs Fnatic', 'esports-valorant', 'https://www.youtube.com/embed/e_E9W2vsRbQ', 'live', now() - interval '10 minutes'),
       ('CS2 Mock: NAVI vs FaZe', 'esports-cs2', 'https://www.youtube.com/embed/ExZtISgOxEQ', 'live', now() - interval '8 minutes'),
-      ('Formula 1 Mock: Bahrain GP', 'motorsport-f1', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '5 days'),
-      ('Tennis Mock: Alcaraz vs Sinner', 'tennis', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '6 days'),
-      ('Volleyball Mock: Poland vs Italy', 'volleyball', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '7 days'),
-      ('Handball Mock: Denmark vs France', 'handball', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'upcoming', now() + interval '8 days'),
-      ('Past Football Mock: Barca vs Real', 'football', 'https://www.youtube.com/watch?v=o3V-GvvzjE4', 'completed', now() - interval '10 days'),
+      ('Formula 1 Mock: Bahrain GP', 'motorsport-f1', 'https://www.youtube.com/embed/bFXLP487kXo', 'upcoming', now() + interval '5 days'),
+      ('Tennis Mock: Alcaraz vs Sinner', 'tennis', 'https://www.youtube.com/embed/hSjxZYVdptw', 'upcoming', now() + interval '6 days'),
+      ('Volleyball Mock: Poland vs Italy', 'volleyball', 'https://www.youtube.com/embed/I-r8MxcityM', 'upcoming', now() + interval '7 days'),
+      ('Handball Mock: Denmark vs France', 'handball', 'https://www.youtube.com/embed/SkmBDb_Wpy4', 'upcoming', now() + interval '8 days'),
+      ('Past Football Mock: Barca vs Real', 'football', 'https://www.youtube.com/embed/aq8vxvFl7Mc', 'completed', now() - interval '10 days'),
       ('Past CS2 Mock: Vitality vs MOUZ', 'esports-cs2', 'https://www.youtube.com/embed/ExZtISgOxEQ', 'completed', now() - interval '14 days')
   ) as t(title, category, stream_url, status, starts_at)
 ), inserted as (
