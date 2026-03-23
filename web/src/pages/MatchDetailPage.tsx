@@ -6,7 +6,9 @@ import { Alert, AlertDescription } from '../components/ui/alert'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
-import { fetchEventTypes, fetchMatchById, fetchMatchLeaderboard, simulateEvent, submitPrediction } from '../lib/api'
+import { Switch } from '../components/ui/switch'
+import { fetchEventTypes, fetchMatchById, fetchMatchLeaderboard, fetchNotificationPrefs, setNotificationPref, simulateEvent, submitPrediction } from '../lib/api'
+import type { MatchStatus } from '../lib/types'
 
 function toEmbedUrl(rawUrl: string) {
   try {
@@ -58,6 +60,12 @@ export function MatchDetailPage() {
     refetchInterval: 5000,
   })
 
+  const notificationPrefsQuery = useQuery({
+    queryKey: ['notification-prefs', matchId],
+    queryFn: () => fetchNotificationPrefs(matchId || ''),
+    enabled: Boolean(matchId),
+  })
+
   const predictMutation = useMutation({
     mutationFn: ({ eventTypeId }: { eventTypeId: string }) => submitPrediction(matchId || '', eventTypeId),
     onSuccess: async () => {
@@ -81,7 +89,31 @@ export function MatchDetailPage() {
     },
   })
 
+  const notificationMutation = useMutation({
+    mutationFn: ({ eventTypeId, enabled }: { eventTypeId: string; enabled: boolean }) =>
+      setNotificationPref(matchId || '', eventTypeId, enabled),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['notification-prefs', matchId] })
+    },
+    onError: (error: Error) => {
+      setMessage(error.message)
+    },
+  })
+
   const canPredict = useMemo(() => matchQuery.data?.status === 'live', [matchQuery.data?.status])
+
+  const lockReason = useMemo(() => {
+    const status = matchQuery.data?.status
+    return predictionLockReason(status)
+  }, [matchQuery.data?.status])
+
+  const enabledByEventType = useMemo(() => {
+    const map = new Map<string, boolean>()
+    for (const pref of notificationPrefsQuery.data || []) {
+      map.set(pref.event_type_id, pref.enabled)
+    }
+    return map
+  }, [notificationPrefsQuery.data])
 
   if (matchQuery.isLoading) {
     return <p className="text-sm text-slate-300">Loading match...</p>
@@ -158,9 +190,35 @@ export function MatchDetailPage() {
 
               {!canPredict ? (
                 <Alert className="mt-3 border-amber-400/30 bg-amber-500/10 text-amber-100">
-                  <AlertDescription>Predictions are open only when match status is `live`.</AlertDescription>
+                  <AlertDescription>{lockReason}</AlertDescription>
                 </Alert>
               ) : null}
+            </CardContent>
+          </Card>
+
+          <Card className="border-slate-700/80 bg-slate-950/40">
+            <CardHeader>
+              <CardTitle className="text-base">Match Notifications</CardTitle>
+              <CardDescription>Toggle in-app alerts per event type for this match.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {(eventTypesQuery.data || []).map((eventType) => {
+                const enabled = enabledByEventType.get(eventType.id) ?? false
+                return (
+                  <label
+                    key={`notif-${eventType.id}`}
+                    className="flex items-center justify-between rounded-lg border border-slate-700/70 bg-slate-800/40 px-3 py-2 text-sm"
+                  >
+                    <span>{eventType.name}</span>
+                    <Switch
+                      checked={enabled}
+                      onCheckedChange={(nextEnabled) => notificationMutation.mutate({ eventTypeId: eventType.id, enabled: nextEnabled })}
+                      disabled={notificationMutation.isPending}
+                      aria-label={`Toggle ${eventType.name} notifications`}
+                    />
+                  </label>
+                )
+              })}
             </CardContent>
           </Card>
         </CardContent>
@@ -221,4 +279,13 @@ export function MatchDetailPage() {
       </Card>
     </section>
   )
+}
+
+function predictionLockReason(status?: MatchStatus) {
+  if (!status) return 'Predictions are temporarily unavailable.'
+  if (status === 'live') return ''
+  if (status === 'upcoming') return 'Predictions are locked: this match has not started yet.'
+  if (status === 'completed' || status === 'cancelled') return `Predictions are locked: match is ${status}.`
+  if (status === 'draft') return 'Predictions are locked: match is still in draft mode.'
+  return 'Predictions are locked for this match.'
 }

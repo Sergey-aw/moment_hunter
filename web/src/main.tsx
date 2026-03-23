@@ -6,9 +6,13 @@ import './index.css'
 import { AppShell } from './app/AppShell'
 import { AuthPage } from './pages/AuthPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
+import { LicensePage } from './pages/LicensePage'
 import { MatchDetailPage } from './pages/MatchDetailPage'
 import { MatchesPage } from './pages/MatchesPage'
+import { OnboardingPage } from './pages/OnboardingPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { RoomDetailPage } from './pages/RoomDetailPage'
+import { RoomsPage } from './pages/RoomsPage'
 import { ProtectedLayout } from './app/ProtectedLayout'
 
 const queryClient = new QueryClient()
@@ -19,13 +23,20 @@ const router = createBrowserRouter([
     element: <AuthPage />,
   },
   {
+    path: '/license',
+    element: <LicensePage />,
+  },
+  {
     element: <ProtectedLayout />,
     children: [
+      { path: '/onboarding', element: <OnboardingPage /> },
       {
         element: <AppShell />,
         children: [
           { path: '/', element: <MatchesPage /> },
           { path: '/match/:matchId', element: <MatchDetailPage /> },
+          { path: '/rooms', element: <RoomsPage /> },
+          { path: '/rooms/:roomId', element: <RoomDetailPage /> },
           { path: '/leaderboard', element: <LeaderboardPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
