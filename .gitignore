@@ -14,3 +14,4 @@ web/.DS_Store
 
 # Supabase local temp/cache
 web/supabase/.temp/
+.vercel

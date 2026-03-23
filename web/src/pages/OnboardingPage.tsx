@@ -66,7 +66,7 @@ export function OnboardingPage() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['my-profile'] })
       localStorage.removeItem(ONBOARDING_DRAFT_KEY)
-      window.location.assign('/')
+      window.location.assign('/welcome')
     },
     onError: (mutationError: Error) => setError(mutationError.message),
   })

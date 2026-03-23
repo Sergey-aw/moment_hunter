@@ -112,9 +112,27 @@ export async function completeOnboarding(input: {
     onboarding_goal: input.onboardingGoal,
     onboarding_completed: true,
     onboarding_completed_at: new Date().toISOString(),
+    welcome_tour_completed: false,
+    welcome_tour_completed_at: null,
   }
 
   const { data, error } = await supabase.from('profiles').upsert(payload, { onConflict: 'user_id' }).select('*').single()
+  if (error) throw error
+  return data as Profile
+}
+
+export async function completeWelcomeTour() {
+  const user = await getUserOrThrow()
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({
+      welcome_tour_completed: true,
+      welcome_tour_completed_at: new Date().toISOString(),
+    })
+    .eq('user_id', user.id)
+    .select('*')
+    .single()
+
   if (error) throw error
   return data as Profile
 }

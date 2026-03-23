@@ -13,6 +13,7 @@ import { OnboardingPage } from './pages/OnboardingPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { RoomDetailPage } from './pages/RoomDetailPage'
 import { RoomsPage } from './pages/RoomsPage'
+import { WelcomeTourPage } from './pages/WelcomeTourPage'
 import { ProtectedLayout } from './app/ProtectedLayout'
 
 const queryClient = new QueryClient()
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
     element: <ProtectedLayout />,
     children: [
       { path: '/onboarding', element: <OnboardingPage /> },
+      { path: '/welcome', element: <WelcomeTourPage /> },
       {
         element: <AppShell />,
         children: [

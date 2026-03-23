@@ -9,6 +9,7 @@ export function ProtectedLayout() {
   const location = useLocation()
   const [checkingProfile, setCheckingProfile] = useState(true)
   const [onboardingCompleted, setOnboardingCompleted] = useState(false)
+  const [welcomeTourCompleted, setWelcomeTourCompleted] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -19,16 +20,22 @@ export function ProtectedLayout() {
         if (active) {
           setCheckingProfile(false)
           setOnboardingCompleted(false)
+          setWelcomeTourCompleted(false)
         }
         return
       }
 
       setCheckingProfile(true)
 
-      const { data } = await supabase.from('profiles').select('onboarding_completed').eq('user_id', session.user.id).maybeSingle()
+      const { data } = await supabase
+        .from('profiles')
+        .select('onboarding_completed, welcome_tour_completed')
+        .eq('user_id', session.user.id)
+        .maybeSingle()
 
       if (active) {
         setOnboardingCompleted(Boolean(data?.onboarding_completed))
+        setWelcomeTourCompleted(Boolean(data?.welcome_tour_completed))
         setCheckingProfile(false)
       }
     }
@@ -56,8 +63,17 @@ export function ProtectedLayout() {
   }
 
   const isOnboardingRoute = location.pathname.startsWith('/onboarding')
+  const isWelcomeRoute = location.pathname.startsWith('/welcome')
 
-  if (onboardingCompleted && isOnboardingRoute) {
+  if (!onboardingCompleted && isWelcomeRoute) {
+    return <Navigate to="/onboarding" replace />
+  }
+
+  if (onboardingCompleted && !welcomeTourCompleted && !isWelcomeRoute) {
+    return <Navigate to="/welcome" replace />
+  }
+
+  if (onboardingCompleted && welcomeTourCompleted && (isOnboardingRoute || isWelcomeRoute)) {
     return <Navigate to="/" replace />
   }
 

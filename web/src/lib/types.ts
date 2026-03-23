@@ -67,6 +67,8 @@ export type Profile = {
   onboarding_completed_at: string | null
   favorite_categories: string[]
   onboarding_goal: 'casual' | 'competitive' | 'creator' | null
+  welcome_tour_completed: boolean
+  welcome_tour_completed_at: string | null
 }
 
 export type MatchLeaderboardRow = {

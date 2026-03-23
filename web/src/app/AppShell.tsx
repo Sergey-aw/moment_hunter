@@ -17,7 +17,7 @@ export function AppShell() {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 pb-24 pt-4 sm:px-6 lg:px-8 lg:pb-8">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pb-24 pt-4 sm:px-6 lg:px-8 lg:pb-8">
         <header className="rounded-2xl border border-slate-700/60 bg-slate-900/60 px-4 py-4 backdrop-blur-xl sm:px-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -58,7 +58,9 @@ export function AppShell() {
           })}
         </nav>
 
-        <Outlet />
+        <div className="flex-1">
+          <Outlet />
+        </div>
 
         <footer className="mt-8 rounded-xl border border-slate-700/70 bg-slate-900/60 px-4 py-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
