@@ -4,6 +4,7 @@ import type {
   GlobalLeaderboardRow,
   Match,
   MatchLeaderboardRow,
+  MyMatchBet,
   NotificationPref,
   Profile,
   Room,
@@ -86,6 +87,20 @@ export async function fetchMatchLeaderboard(matchId: string) {
 
   if (error) throw error
   return (data || []) as MatchLeaderboardRow[]
+}
+
+export async function fetchMyMatchBets(matchId: string) {
+  const user = await getUserOrThrow()
+  const { data, error } = await supabase
+    .from('predictions')
+    .select('id,match_id,event_type_id,predicted_ts,created_at')
+    .eq('user_id', user.id)
+    .eq('match_id', matchId)
+    .order('created_at', { ascending: false })
+    .limit(30)
+
+  if (error) throw error
+  return (data || []) as MyMatchBet[]
 }
 
 export async function fetchMyProfile() {

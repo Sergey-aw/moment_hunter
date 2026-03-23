@@ -87,3 +87,11 @@ export type GlobalLeaderboardRow = {
   total_points: number
   rank: number
 }
+
+export type MyMatchBet = {
+  id: string
+  match_id: string
+  event_type_id: string
+  predicted_ts: string
+  created_at: string
+}
