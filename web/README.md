@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# Moment Hunter MVP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Moment Hunter is a prediction game prototype where users watch live sports/esports streams and try to predict the exact moment of key events (goal, kill, round win, etc.).
 
-Currently, two official plugins are available:
+Users earn points based on timing accuracy and compete in leaderboards.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## MVP Scope
 
-## React Compiler
+- Email/password auth with Supabase Auth
+- Live/upcoming matches list
+- Match page with stream + prediction buttons
+- Server-side scoring based on prediction accuracy
+- Match and global leaderboards
+- Profile with total points
+- Test controls to simulate events for QA
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- Frontend: React + Vite + TypeScript + Tailwind CSS + shadcn-style UI primitives
+- Backend: Supabase (Postgres, Auth, RLS, RPC, triggers)
+- Deployment target: Vercel (frontend) + Supabase (backend)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Project Structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `src/` app code
+- `src/components/ui/` reusable shadcn-style UI components
+- `supabase/migrations/` schema, RLS, seed, and fix migrations
+- Root-level planning docs and SQL snapshots exist one level above this folder
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Environment
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Create `.env` in `web/`:
+
+```env
+VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
+VITE_SUPABASE_ANON_KEY=<your-publishable-key>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Run Locally
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
 ```
+
+Open the local URL shown by Vite.
+
+## Database Setup (CLI)
+
+This project uses Supabase CLI migrations.
+
+```bash
+npx supabase login
+npx supabase link --project-ref <your-project-ref>
+npx supabase db push --include-all
+```
+
+## Seed/Test Data Included
+
+Migrations include:
+
+- Core schema and scoring logic
+- RLS policies
+- Example matches/event types
+- Embed URL fixes for demo matches
+- `simulate_event(...)` RPC for testing scoring
+- Safe-update fix for `settle_event(...)`
+
+## Testing Flow
+
+1. Sign in / sign up.
+2. Open a live match.
+3. Submit prediction for an event type.
+4. Use **Testing Controls** on match page:
+   - `Simulate now`
+   - `+5s`
+5. Verify leaderboard and points updates.
+
+## Notes
+
+- Some YouTube links cannot be embedded due to provider restrictions. The UI falls back to "Open stream in new tab" when needed.
+- Scoring is server-side for fairness.
