@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Root-level local env
+.env
+*.local
+
+# Web app artifacts
+web/node_modules/
+web/dist/
+web/.env
+web/.env.local
+web/.DS_Store
+
+# Supabase local temp/cache
+web/supabase/.temp/
